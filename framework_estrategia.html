@@ -1,0 +1,811 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tu Framework de Estrategia de Contenido</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#242422;
+    --bg-panel:#2b2b29;
+    --bg-panel-2:#313130;
+    --red:#d81e3e;
+    --red-soft:rgba(216,30,62,0.14);
+    --white:#f5f5f2;
+    --muted:#b3b1ac;
+    --line:rgba(216,30,62,0.55);
+    --line-soft:rgba(255,255,255,0.08);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--white);
+    font-family:'Poppins',sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{
+    max-width:880px;
+    margin:0 auto;
+    padding:56px 20px 100px;
+  }
+  .kicker{
+    font-size:12px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--red);
+    font-weight:600;
+    margin:0 0 10px;
+  }
+  .mega{
+    font-family:'Fredoka',sans-serif;
+    font-weight:700;
+    color:var(--red);
+    text-transform:uppercase;
+    line-height:0.92;
+    letter-spacing:0.01em;
+    margin:0;
+    font-size:clamp(34px,7.6vw,68px);
+  }
+  .mega span{display:block;}
+  .section-title span{display:block;}
+  .top-meta{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    flex-wrap:wrap;
+    gap:16px;
+    margin-top:22px;
+    padding-bottom:28px;
+    border-bottom:1px solid var(--line-soft);
+  }
+  .agency{
+    font-size:15px;
+    color:var(--white);
+    font-weight:500;
+  }
+  .agency small{display:block;color:var(--muted);font-size:12px;margin-top:2px;}
+  .pill{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    border:1.5px solid var(--red);
+    color:var(--white);
+    border-radius:999px;
+    padding:8px 18px;
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:0.03em;
+  }
+  .dot{
+    width:14px;height:14px;border:1.5px solid var(--red);border-radius:50%;
+    display:inline-block;
+  }
+  .intro{
+    margin-top:26px;
+    color:var(--muted);
+    font-size:15px;
+    max-width:660px;
+  }
+  .toc{
+    margin-top:34px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px 24px;
+  }
+  .toc a{
+    color:var(--white);
+    text-decoration:none;
+    font-size:13.5px;
+    font-weight:500;
+    display:flex;
+    gap:10px;
+    align-items:baseline;
+    border-bottom:1px dashed var(--line-soft);
+    padding-bottom:8px;
+    background:none;
+    cursor:pointer;
+  }
+  .toc a b{color:var(--red);font-family:'Fredoka',sans-serif;font-weight:600;}
+  .acc-controls{
+    display:flex;
+    gap:10px;
+    margin-top:26px;
+  }
+  .pill-btn{
+    font-family:'Poppins',sans-serif;
+    background:transparent;
+    border:1.5px solid var(--line-soft);
+    color:var(--muted);
+    padding:8px 18px;
+    border-radius:999px;
+    font-size:12.5px;
+    font-weight:600;
+    letter-spacing:0.02em;
+    cursor:pointer;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .pill-btn:hover{border-color:var(--red);color:var(--red);}
+  .accordion{
+    margin-top:50px;
+    border-top:1px solid var(--line-soft);
+  }
+  details.acc-item{
+    border-bottom:1px solid var(--line-soft);
+  }
+  summary.acc-summary{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:18px;
+    padding:26px 0;
+    cursor:pointer;
+    list-style:none;
+  }
+  summary.acc-summary::-webkit-details-marker{display:none;}
+  summary.acc-summary::marker{content:'';}
+  .acc-heading{
+    display:flex;
+    align-items:baseline;
+    gap:16px;
+    min-width:0;
+  }
+  .acc-num{
+    font-family:'Fredoka',sans-serif;
+    color:var(--red);
+    font-weight:600;
+    font-size:15px;
+    opacity:0.65;
+    min-width:26px;
+    flex-shrink:0;
+  }
+  .section-title{
+    font-family:'Fredoka',sans-serif;
+    font-weight:700;
+    color:var(--red);
+    text-transform:uppercase;
+    font-size:clamp(22px,4vw,34px);
+    line-height:1.05;
+    margin:0;
+  }
+  .acc-icon{
+    flex-shrink:0;
+    width:32px;height:32px;
+    border:1.5px solid var(--red);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--red);
+    font-family:'Fredoka',sans-serif;
+    font-size:19px;
+    font-weight:600;
+    transition:transform .2s ease;
+  }
+  details[open] .acc-icon{transform:rotate(45deg);}
+  .acc-body{
+    padding:0 0 40px;
+  }
+  .rule{
+    height:1px;
+    background:var(--line);
+    border:0;
+    margin:22px 0;
+  }
+  h3.sub{
+    font-size:16px;
+    font-weight:700;
+    color:var(--white);
+    margin:28px 0 8px;
+    letter-spacing:0.01em;
+  }
+  p{color:var(--white);font-size:14.5px;margin:0 0 12px;}
+  p.muted{color:var(--muted);}
+  ul,ol{margin:0 0 14px;padding-left:20px;color:var(--white);font-size:14.5px;}
+  li{margin-bottom:6px;}
+  li::marker{color:var(--red);}
+  em.ex{color:var(--muted);font-style:italic;}
+  .impact{
+    margin:26px 0 0;
+    padding:18px 20px;
+    background:var(--bg-panel);
+    border-left:3px solid var(--red);
+    border-radius:4px;
+  }
+  .tag{
+    display:inline-block;
+    background:var(--red);
+    color:var(--white);
+    font-size:10.5px;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    padding:3px 10px;
+    border-radius:999px;
+    margin-bottom:10px;
+  }
+  .impact p{margin:0;color:var(--white);font-size:14px;}
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin:18px 0 24px;
+    font-size:13.5px;
+  }
+  thead tr{background:var(--red);}
+  thead th{
+    color:var(--white);
+    text-align:left;
+    padding:12px 14px;
+    font-weight:700;
+    text-transform:uppercase;
+    font-size:12px;
+    letter-spacing:0.05em;
+  }
+  tbody td{
+    padding:11px 14px;
+    border-bottom:1px solid var(--line-soft);
+    color:var(--white);
+    vertical-align:top;
+  }
+  tbody tr:nth-child(even){background:var(--bg-panel);}
+  .funnel-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin:16px 0 22px;
+  }
+  .funnel{
+    flex:1;
+    min-width:150px;
+    background:var(--bg-panel);
+    border:1px solid var(--line-soft);
+    border-radius:8px;
+    padding:16px;
+  }
+  .funnel .label{
+    font-family:'Fredoka',sans-serif;
+    color:var(--red);
+    font-weight:600;
+    font-size:15px;
+    text-transform:uppercase;
+    margin-bottom:6px;
+    display:block;
+  }
+  .funnel p{font-size:13px;color:var(--muted);margin:0;}
+  .steps{counter-reset:step;list-style:none;padding-left:0;}
+  .steps li{
+    counter-increment:step;
+    position:relative;
+    padding-left:40px;
+    margin-bottom:16px;
+  }
+  .steps li::before{
+    content:counter(step);
+    position:absolute;
+    left:0;top:-1px;
+    width:26px;height:26px;
+    border:1.5px solid var(--red);
+    color:var(--red);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Fredoka',sans-serif;
+    font-weight:600;
+    font-size:13px;
+  }
+  .roles{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+    margin-top:16px;
+  }
+  .role-card{
+    background:var(--bg-panel);
+    border-radius:8px;
+    padding:20px;
+  }
+  .role-card h4{
+    font-family:'Fredoka',sans-serif;
+    color:var(--red);
+    text-transform:uppercase;
+    font-size:15px;
+    margin:0 0 10px;
+  }
+  .timeline{margin-top:10px;}
+  .tl-item{
+    display:flex;
+    gap:18px;
+    padding:16px 0;
+    border-top:1px solid var(--line-soft);
+  }
+  .tl-item:first-child{border-top:none;}
+  .tl-month{
+    font-family:'Fredoka',sans-serif;
+    color:var(--red);
+    font-weight:600;
+    min-width:90px;
+    font-size:14px;
+    text-transform:uppercase;
+  }
+  footer{
+    margin-top:60px;
+    padding-top:26px;
+    border-top:1px solid var(--line-soft);
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:14px;
+  }
+  footer .doc-no{
+    font-weight:700;
+    font-size:13px;
+    letter-spacing:0.04em;
+  }
+  footer .doc-no span{color:var(--red);}
+  footer .contact{color:var(--muted);font-size:13px;text-align:right;}
+  @media (max-width:640px){
+    .toc{grid-template-columns:1fr;}
+    .roles{grid-template-columns:1fr;}
+    footer{flex-direction:column;}
+    footer .contact{text-align:left;}
+    .acc-heading{gap:10px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="kicker">Tu guía de trabajo · Nadir</p>
+  <h1 class="mega"><span>TU FRAMEWORK</span><span>DE ESTRATEGIA</span><span>DE CONTENIDO</span></h1>
+
+  <div class="top-meta">
+    <div class="agency">Tu marca personal
+      <small>Onboarding · Producción · Escalado</small>
+    </div>
+    <div class="pill"><span class="dot"></span> Versión 2026</div>
+  </div>
+
+  <p class="intro">Este es tu documento de trabajo. Aquí está todo lo que vamos a definir juntos para construir tu contenido: quién es tu audiencia, con qué formato vas a grabar, con qué cadencia vas a publicar y qué estrategia va a convertir esas publicaciones en autoridad y en ventas. Lo completamos contigo en tu primer mes y lo revisamos cada trimestre. Cada bloque de abajo se abre por separado — toca el que necesites.</p>
+
+  <div class="toc">
+    <a data-goto="mision"><b>01</b> Misión, Visión y Valores</a>
+    <a data-goto="audiencia"><b>02</b> Tu Audiencia</a>
+    <a data-goto="formato"><b>03</b> Tu Formato</a>
+    <a data-goto="recurrencia"><b>04</b> Tu Recurrencia</a>
+    <a data-goto="estrategia"><b>05</b> Tu Estrategia</a>
+    <a data-goto="marca"><b>06</b> Tu Identidad de Marca</a>
+    <a data-goto="coordinacion"><b>07</b> Coordinación y Herramientas</a>
+    <a data-goto="pasoapaso"><b>08</b> Tu Paso a Paso</a>
+    <a data-goto="mapa"><b>09</b> Tu Mapa de Trabajo</a>
+    <a data-goto="roles"><b>10</b> Roles y Responsabilidades</a>
+  </div>
+
+  <div class="acc-controls">
+    <button type="button" class="pill-btn" id="expandAll">Abrir todo</button>
+    <button type="button" class="pill-btn" id="collapseAll">Cerrar todo</button>
+  </div>
+
+  <div class="accordion">
+
+    <!-- 01 MISION -->
+    <details class="acc-item" id="mision" open>
+      <summary class="acc-summary">
+        <div class="acc-heading"><span class="acc-num">01</span><h2 class="section-title"><span>MISIÓN, VISIÓN</span><span>Y VALORES</span></h2></div>
+        <span class="acc-icon">+</span>
+      </summary>
+      <div class="acc-body">
+        <p>Antes de grabar el primer vídeo necesitas tener esto claro por escrito. Si todavía no lo tienes, es lo primero que trabajamos juntos.</p>
+        <h3 class="sub">Tu misión</h3>
+        <p>Qué haces hoy y para quién. <em class="ex">Ej: "Ayudo a hombres de 30-45 años a recuperar el control de su cuerpo y su energía sin depender de dietas milagro."</em></p>
+        <h3 class="sub">Tu visión</h3>
+        <p>Dónde quieres estar en 2-3 años. <em class="ex">Ej: "Ser la referencia en fitness sostenible de habla hispana para profesionales ocupados."</em></p>
+        <h3 class="sub">Tus valores</h3>
+        <p>3 a 5 principios innegociables que van a filtrar cada pieza de contenido. <em class="ex">Ej: honestidad basada en evidencia, cero postureo, constancia por encima de intensidad.</em></p>
+        <div class="impact">
+          <span class="tag">Impacto para ti</span>
+          <p>Cuando tu misión y tus valores están claros, dejas de dudar qué publicar. Cada idea se filtra sola —encaja contigo o no— y tu marca empieza a sonar siempre igual, que es justo lo que te hace reconocible y confiable.</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- 02 AUDIENCIA -->
+    <details class="acc-item" id="audiencia">
+      <summary class="acc-summary">
+        <div class="acc-heading"><span class="acc-num">02</span><h2 class="section-title"><span>TU AUDIENCIA</span></h2></div>
+        <span class="acc-icon">+</span>
+      </summary>
+      <div class="acc-body">
+        <p>La investigación de tu mercado tiene que cubrir:</p>
+
+        <h3 class="sub">Puntos de dolor concretos</h3>
+        <p>¿Qué siente tu audiencia, qué le duele hoy, qué le frena a dar el paso, qué pasaría si sigue así?</p>
+
+        <h3 class="sub">Intentos previos y errores cometidos</h3>
+        <p>¿Qué ha intentado para cambiarlo, cómo lo probó, en qué punto siempre abandonaba, por qué lo dejaba?</p>
+
+        <h3 class="sub">Puntos de deseo y sueños</h3>
+        <p>¿Qué quiere alcanzar de verdad tu público? <em class="ex">Ej: libertad financiera, reconocimiento, autoestima.</em></p>
+
+        <h3 class="sub">Creencias disfuncionales</h3>
+        <p>Ideas equivocadas que tu público cree y que le impiden comprarte. <em class="ex">Ej: "Repetir contenido es aburrido."</em> Corregir creencias es reprogramar la mirada de tu audiencia para que vea valor en lo que haces.</p>
+
+        <h3 class="sub">Preconceptos del mercado</h3>
+        <p>Qué piensa tu público sobre tu nicho y qué verdades falsas necesitas "destruir".</p>
+        <ul>
+          <li><em class="ex">"El psicólogo es solo para quien tiene problemas mentales graves"</em> — falso: da herramientas, la persona decide usarlas.</li>
+          <li><em class="ex">"Hay que publicar todos los días para ver resultados"</em> — falso: la calidad gana a la cantidad.</li>
+        </ul>
+
+        <h3 class="sub">La temperatura de tu audiencia</h3>
+        <p>No todo el que te ve está en el mismo punto. Vamos a diferenciar tu contenido según:</p>
+        <div class="funnel-row">
+          <div class="funnel"><span class="label">Fría</span><p>No te conoce. Contenido viral / educativo (TOFU).</p></div>
+          <div class="funnel"><span class="label">Tibia</span><p>Ya te sigue y confía parcialmente. Autoridad y conexión (MOFU).</p></div>
+          <div class="funnel"><span class="label">Caliente</span><p>Lista para comprarte. Prueba social y urgencia (BOFU).</p></div>
+        </div>
+        <h3 class="sub">De dónde sacamos esta información</h3>
+        <p class="muted">Tus comentarios y DMs recurrentes, encuestas en tus historias, reseñas de tu competencia, foros y grupos del nicho, Google Trends, y entrevistas directas contigo sobre lo que más te preguntan.</p>
+
+        <h3 class="sub">Tu avatar de cliente ideal</h3>
+        <table>
+          <tbody>
+            <tr><td><b>Nombre y apellido ficticios</b></td><td>&nbsp;</td></tr>
+            <tr><td><b>Edad</b></td><td>&nbsp;</td></tr>
+            <tr><td><b>Ocupación e ingresos aprox.</b></td><td>&nbsp;</td></tr>
+            <tr><td><b>Situación familiar</b></td><td>&nbsp;</td></tr>
+            <tr><td><b>Situación actual (dolor)</b></td><td>&nbsp;</td></tr>
+            <tr><td><b>Situación deseada</b></td><td>&nbsp;</td></tr>
+            <tr><td><b>Creencias limitantes</b></td><td>&nbsp;</td></tr>
+            <tr><td><b>Traumas / víctima de…</b></td><td>&nbsp;</td></tr>
+            <tr><td><b>Canales donde consume contenido</b></td><td>&nbsp;</td></tr>
+            <tr><td><b>Objeciones de compra frecuentes</b></td><td>&nbsp;</td></tr>
+          </tbody>
+        </table>
+
+        <div class="impact">
+          <span class="tag">Impacto para ti</span>
+          <p>Cuanto mejor definamos a tu audiencia, menos grabas "a ciegas". Cada guion apunta directo al dolor y al deseo de quien realmente te va a comprar, así que necesitas menos piezas para conseguir más resultado.</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- 03 FORMATO -->
+    <details class="acc-item" id="formato">
+      <summary class="acc-summary">
+        <div class="acc-heading"><span class="acc-num">03</span><h2 class="section-title"><span>TU FORMATO</span></h2></div>
+        <span class="acc-icon">+</span>
+      </summary>
+      <div class="acc-body">
+        <p>Las plantillas de formato las definimos juntos en tu jornada de trabajo, hasta encontrar tu guion ganador.</p>
+
+        <h3 class="sub">El objetivo de la estructura</h3>
+        <ol>
+          <li>Vendes tu historia</li>
+          <li>Vendes tu autoridad</li>
+          <li>Vendes tu programa</li>
+        </ol>
+
+        <h3 class="sub">Cómo se ejecuta cada capa</h3>
+        <p><b>Vender tu historia</b> — creas historias genuinas cruzando conflictos universales, personas famosas, estudios o teorías, con una sola idea general por vídeo.</p>
+        <p><b>Vender tu autoridad</b> — educas metiendo a tu audiencia en materia sobre sus dolores, creencias y deseos, rompiendo una creencia y dejando una moraleja reflexiva.</p>
+        <p><b>Vender tu programa</b> — tu guion atrae atención (gancho), genera interés narrando algo conocido (retención + autoridad inconsciente), conecta la narrativa con tu YO, y tu YO precede al producto.</p>
+        <p class="muted">No ofreces el programa a la primera ni quemas a tu audiencia con venta directa constante; para eso están los anuncios. Un/a <i>setter</i> gestiona tus chats y te deriva los leads para que cierres tú; al alcanzar techo de autoridad, el embudo funciona solo, sin equipo comercial.</p>
+
+        <hr class="rule">
+
+        <h3 class="sub">Tus 8 formatos ganadores, testeados por el algoritmo</h3>
+        <table>
+          <thead><tr><th>Formato</th><th>Cuándo usarlo</th></tr></thead>
+          <tbody>
+            <tr><td><b>1. Pantalla dividida</b></td><td>Elemento transicional al inicio del guion.</td></tr>
+            <tr><td><b>2. Pantalla verde</b></td><td>Muy popular en TikTok; apareces pequeño en una esquina narrando.</td></tr>
+            <tr><td><b>3. Mini charla</b></td><td>Interpretas dos personajes (tú mismo/a doblando la situación).</td></tr>
+            <tr><td><b>4. Narrado</b></td><td>Sin opinión a priori; abres con algo negativo y lo desmontas después.</td></tr>
+            <tr><td><b>5. Cine</b></td><td>Pieza muy trabajada, alto potencial viral, mayor producción.</td></tr>
+            <tr><td><b>6. Storytelling visual</b></td><td>No negociable. Conexión emocional, testimonios e historia personal.</td></tr>
+            <tr><td><b>7. Experimento social</b></td><td>Sales a la calle a hablar con gente sobre un tema.</td></tr>
+            <tr><td><b>8. Conflicto situacional</b></td><td>Creas una creencia negativa y revelas que la realidad es otra.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="sub">Tus pilares de contenido</h3>
+        <p>Vamos a definir 3 a 5 temas core sobre los que vas a hablar de forma recurrente (mentalidad, nutrición, casos reales, mitos del sector, bastidores de tu negocio…). Cada pieza que grabes debe encajar en al menos uno de estos pilares para que tu marca se mantenga coherente a largo plazo.</p>
+
+        <h3 class="sub">Tu firma personal</h3>
+        <ul>
+          <li>Elementos de repetición (frases, gestos, cierre)</li>
+          <li>Tus manías y patrones propios</li>
+          <li>Recursos que usas siempre dentro de cada vídeo</li>
+        </ul>
+
+        <div class="impact">
+          <span class="tag">Impacto para ti</span>
+          <p>Con un formato definido dejas de improvisar cada vez que grabas. Repites una estructura que ya sabes que funciona, ahorras tiempo de edición y tu audiencia empieza a reconocerte por tu estilo, no solo por tu cara.</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- 04 RECURRENCIA -->
+    <details class="acc-item" id="recurrencia">
+      <summary class="acc-summary">
+        <div class="acc-heading"><span class="acc-num">04</span><h2 class="section-title"><span>TU RECURRENCIA</span></h2></div>
+        <span class="acc-icon">+</span>
+      </summary>
+      <div class="acc-body">
+        <ul>
+          <li><b>Duración de la pieza</b> — media estimada según el tipo de formato.</li>
+          <li><b>Tus días de publicación</b> — según tu disponibilidad real para grabar.</li>
+          <li><b>Piezas por día</b> (1, 2 o 3) incluyendo historias, reacciones, reels, posts, directos y carruseles.</li>
+        </ul>
+
+        <h3 class="sub">La cadencia que te recomendamos</h3>
+        <table>
+          <thead><tr><th>Nivel</th><th>Piezas largas/semana</th><th>Historias/día</th><th>Notas</th></tr></thead>
+          <tbody>
+            <tr><td>Mínimo viable</td><td>3</td><td>2-3</td><td>Sostenible sin que te quemes</td></tr>
+            <tr><td>Ideal (recomendado)</td><td>5-6</td><td>4-6</td><td>Combina TOFU, MOFU y BOFU cada semana</td></tr>
+            <tr><td>Lanzamiento</td><td>7+</td><td>6-8</td><td>Solo en tus ventanas de venta activa</td></tr>
+          </tbody>
+        </table>
+
+        <div class="impact">
+          <span class="tag">Impacto para ti</span>
+          <p>Publicar con un ritmo definido —ni de más ni de menos— es lo que te mantiene visible para el algoritmo sin que llegues agotado/a a fin de mes. Es la diferencia entre un proyecto sostenible y uno que abandonas a los tres meses.</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- 05 ESTRATEGIA -->
+    <details class="acc-item" id="estrategia">
+      <summary class="acc-summary">
+        <div class="acc-heading"><span class="acc-num">05</span><h2 class="section-title"><span>TU ESTRATEGIA</span></h2></div>
+        <span class="acc-icon">+</span>
+      </summary>
+      <div class="acc-body">
+        <h3 class="sub">Cómo medimos el rendimiento de tu contenido</h3>
+        <table>
+          <thead><tr><th>Categoría</th><th>Métricas</th></tr></thead>
+          <tbody>
+            <tr><td><b>Alcance</b></td><td>Views · viewers únicos · % seguidores vs. no seguidores · fuentes de tráfico</td></tr>
+            <tr><td><b>Retención</b></td><td>Skip rate · watch time medio · curva de retención · duración total · replays</td></tr>
+            <tr><td><b>Acciones</b></td><td>Share / save / like / comment / repost rate</td></tr>
+            <tr><td><b>Conversión</b></td><td>Follows generados · conversión viewers → follows</td></tr>
+            <tr><td><b>Audiencia</b></td><td>Edad · género · seguidores vs. no seguidores</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="sub">Cómo medimos si esto te está generando dinero</h3>
+        <p class="muted">Las métricas de arriba te dicen si el contenido gusta. Estas te dicen si te está pagando las facturas.</p>
+        <table>
+          <thead><tr><th>Métrica</th><th>Para qué te sirve</th></tr></thead>
+          <tbody>
+            <tr><td>Ventas generadas por pieza/campaña</td><td>Conecta tu contenido con tu facturación real</td></tr>
+            <tr><td>CAC (coste de adquisición)</td><td>Si inviertes en ads, sabes si te sale rentable</td></tr>
+            <tr><td>LTV (valor de vida del cliente)</td><td>Cuánto te puedes permitir invertir en captar cada lead</td></tr>
+            <tr><td>ROAS</td><td>Rentabilidad real de tus campañas pagadas</td></tr>
+            <tr><td>Ingreso atribuible al setter</td><td>Mide si el cierre de ventas está siendo eficiente</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="sub">Tus tipos de pieza según la etapa del embudo</h3>
+        <div class="funnel-row">
+          <div class="funnel"><span class="label">Tofu</span><p>Pieza viral — boca del embudo.</p></div>
+          <div class="funnel"><span class="label">Mofu</span><p>Pieza educativa — educa y conecta.</p></div>
+          <div class="funnel"><span class="label">Bofu</span><p>Pieza de conversión.</p></div>
+        </div>
+
+        <h3 class="sub">Tu calendario — mes tipo</h3>
+        <table>
+          <thead><tr><th>Semana</th><th>Contenido</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Educativa + conversión + testimonios</td></tr>
+            <tr><td>2</td><td>Educativa + conversión + urgencia</td></tr>
+            <tr><td>3</td><td>Viral + educativa</td></tr>
+            <tr><td>4</td><td>Viral + educativa + testimonios</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="sub">Tu competencia e ingeniería inversa</h3>
+        <p>Hacemos seguimiento continuo de sus embudos, formatos y audiencia, identificando sus ángulos de dolor, deseo y creencias para usarlos a tu favor. Desmontamos tanto tu competencia como tu propio contenido: qué funciona, por qué, y cómo replicar el mecanismo sin copiar la ejecución.</p>
+
+        <h3 class="sub">Prueba y error</h3>
+        <p>Medimos errores y feedback constante para mejorar la siguiente pieza. Filosofía de prueba y mejora — <b>nada de perfeccionismo</b>: publicamos, medimos, corregimos.</p>
+
+        <h3 class="sub">Si algún día recibes una crisis de reputación</h3>
+        <ol>
+          <li>No respondas en caliente; espera al menos 2 horas antes de decidir una respuesta.</li>
+          <li>Evaluamos juntos si el comentario tiene fundamento real o es ruido.</li>
+          <li>Si hay fundamento: reconoces, corriges y lo comunicas con transparencia.</li>
+          <li>Si es ruido: no alimentas la polémica con contenido reactivo; lo documentamos en tu informe semanal.</li>
+          <li>Nadir centraliza cualquier respuesta pública para que el tono se mantenga coherente con tu marca.</li>
+        </ol>
+
+        <div class="impact">
+          <span class="tag">Impacto para ti</span>
+          <p>Esta es la sección que convierte likes en ingresos. Sin las métricas de negocio, puedes tener contenido "viral" que no te vende nada — con ellas, sabes exactamente qué pieza, qué formato y qué semana te trajeron clientes reales.</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- 06 MARCA -->
+    <details class="acc-item" id="marca">
+      <summary class="acc-summary">
+        <div class="acc-heading"><span class="acc-num">06</span><h2 class="section-title"><span>TU IDENTIDAD</span><span>DE MARCA</span></h2></div>
+        <span class="acc-icon">+</span>
+      </summary>
+      <div class="acc-body">
+        <p>Antes de crear cualquier pieza para ti (lead magnets, infografías, drives, ebooks, contenido, página web) necesitas tener definido tu documento de marca. Esto no lo construye Nadir por ti: es un requisito de tu lado, porque sin él no podemos mantener coherencia en nada de lo que hagamos juntos. Debe incluir:</p>
+        <ul>
+          <li>Tu logo y sus variantes de uso</li>
+          <li>Tu paleta de colores (principal, secundaria, acentos)</li>
+          <li>Tu tipografía (títulos y cuerpo)</li>
+          <li>Tu misión, visión y valores</li>
+          <li>Tus estilos visuales y de foto/vídeo de referencia</li>
+        </ul>
+        <h3 class="sub">Tu tono de voz</h3>
+        <ul>
+          <li>Nivel de formalidad (cercano vs. formal)</li>
+          <li>Uso de humor / seriedad</li>
+          <li>Palabras y expresiones que sí y que no usas</li>
+          <li>Ejemplos de frases "que suenan a ti" y frases que nunca dirías</li>
+        </ul>
+        <div class="impact">
+          <span class="tag">Sugerencia</span>
+          <p>Si todavía no tienes esto definido, podemos ayudarte a construirlo juntos. Pero la claridad de tus propios elementos de marca depende de ti — es la base sobre la que se apoya todo lo demás.</p>
+        </div>
+        <div class="impact">
+          <span class="tag">Impacto para ti</span>
+          <p>Cuando todo esto está definido, cualquier pieza que se cree para ti —la haga quien la haga— se ve y suena como tú. Dejas de depender de que "te salga bien" cada vez; el sistema ya sabe cómo eres.</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- 07 COORDINACION -->
+    <details class="acc-item" id="coordinacion">
+      <summary class="acc-summary">
+        <div class="acc-heading"><span class="acc-num">07</span><h2 class="section-title"><span>COORDINACIÓN</span><span>Y HERRAMIENTAS</span></h2></div>
+        <span class="acc-icon">+</span>
+      </summary>
+      <div class="acc-body">
+        <p>Trabajamos con <b>Notion</b> y <b>Drive</b> como tu nodo central, con automatizaciones donde sea posible. Toda tu información y tu trabajo tienen un lugar fijo donde vivir, con fechas de entrega claras y un flujo de trabajo en cadena.</p>
+        <h3 class="sub">Tu informe semanal</h3>
+        <ol>
+          <li>Qué falló la semana pasada y qué aprendimos</li>
+          <li>Tus métricas clave (rendimiento + negocio)</li>
+          <li>Estado actual de tus piezas en producción</li>
+          <li>Tareas extraordinarias que mejoran tu producto, contenido, marketing o branding</li>
+        </ol>
+        <div class="impact">
+          <span class="tag">Impacto para ti</span>
+          <p>Tienes visibilidad total de en qué punto está tu contenido en cualquier momento, sin tener que preguntar. Nada se pierde ni depende de la memoria de nadie.</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- 08 PASO A PASO -->
+    <details class="acc-item" id="pasoapaso">
+      <summary class="acc-summary">
+        <div class="acc-heading"><span class="acc-num">08</span><h2 class="section-title"><span>TU PASO</span><span>A PASO</span></h2></div>
+        <span class="acc-icon">+</span>
+      </summary>
+      <div class="acc-body">
+        <ol class="steps">
+          <li>Investigamos tu contenido previo para ver qué extrapolar a las nuevas estructuras.</li>
+          <li>Generamos las primeras ideas para lanzar.</li>
+          <li>Definimos el formato ganador con el que tú te sientes más cómodo/a.</li>
+          <li>Estudiamos tus manías y los elementos que te hacen único/a.</li>
+          <li>Desarrollamos tus primeros bloques de guion: Formato 1, 2 y 3, con 3 ideas (3 vídeos del mismo estilo) cada uno.</li>
+          <li>Te entregamos guiones semanal o quincenalmente, ajustando tiempos para corregir patrones en el siguiente lote.</li>
+          <li>Sesión fija cada semana o cada 15 días <b>sin hablar de negocio</b> — conversación cercana para generar lluvia de ideas, con Nadir como entrevistador.</li>
+        </ol>
+        <div class="impact">
+          <span class="tag">Impacto para ti</span>
+          <p>Sabes exactamente qué se espera de ti cada semana, sin sorpresas ni ambigüedad. Eso te quita la carga de "tener que pensarlo todo tú solo/a".</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- 09 MAPA -->
+    <details class="acc-item" id="mapa">
+      <summary class="acc-summary">
+        <div class="acc-heading"><span class="acc-num">09</span><h2 class="section-title"><span>TU MAPA</span><span>DE TRABAJO</span></h2></div>
+        <span class="acc-icon">+</span>
+      </summary>
+      <div class="acc-body">
+        <div class="timeline">
+          <div class="tl-item"><div class="tl-month">Mes 1</div><p style="margin:0">Onboarding: establecemos toda la información y directrices de trabajo (tu perfil, tu audiencia, tus patrones, el alma de tu marca y el estudio de tu competencia). Mes de prueba y error.</p></div>
+          <div class="tl-item"><div class="tl-month">Mes 2</div><p style="margin:0">Se establece tu patrón de trabajo constante, con entrega continuada y genuina por ambas partes.</p></div>
+          <div class="tl-item"><div class="tl-month">Mes 3</div><p style="margin:0">Ya tienes una primera versión estable de tu formato ganador y creativo.</p></div>
+          <div class="tl-item"><div class="tl-month">Mes 4+</div><p style="margin:0">Optimización continua basada en datos, escalado de los formatos que mejor te funcionan y evaluación de nuevos canales o formatos de ingreso.</p></div>
+        </div>
+        <div class="impact">
+          <span class="tag">Impacto para ti</span>
+          <p>Sabes qué esperar en cada etapa, así que no te frustras si el mes 1 no trae resultados explosivos — es la base que hace posible el crecimiento real a partir del mes 3.</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- 10 ROLES -->
+    <details class="acc-item" id="roles">
+      <summary class="acc-summary">
+        <div class="acc-heading"><span class="acc-num">10</span><h2 class="section-title"><span>ROLES Y</span><span>RESPONSABILIDADES</span></h2></div>
+        <span class="acc-icon">+</span>
+      </summary>
+      <div class="acc-body">
+        <div class="roles">
+          <div class="role-card">
+            <h4>Tú</h4>
+            <ul style="margin-bottom:0">
+              <li>Entregar ideas de forma constante</li>
+              <li>Asistir a las sesiones de entrevista</li>
+              <li>Grabar siguiendo los guiones acordados</li>
+              <li>Dar feedback y corregir el guion cuando lo necesites</li>
+              <li>Transparencia genuina en todo momento</li>
+            </ul>
+          </div>
+          <div class="role-card">
+            <h4>Nadir</h4>
+            <ul style="margin-bottom:0">
+              <li>Encontrar equipo adicional si lo necesitas</li>
+              <li>Entregarte los guiones según lo acordado</li>
+              <li>Ser tu estratega de contenido: ideas constantes al banco compartido</li>
+              <li>Análisis de contenido, métricas y competencia</li>
+            </ul>
+          </div>
+        </div>
+        <div class="impact">
+          <span class="tag">Impacto para ti</span>
+          <p>Cada parte sabe exactamente de qué responde. Eso evita fricciones y malentendidos, y te deja enfocado/a solo en lo que realmente te corresponde: ser tú frente a cámara.</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- NOTAS -->
+    <details class="acc-item" id="notas">
+      <summary class="acc-summary">
+        <div class="acc-heading"><span class="acc-num">11</span><h2 class="section-title"><span>TU BANCO</span><span>DE IDEAS</span></h2></div>
+        <span class="acc-icon">+</span>
+      </summary>
+      <div class="acc-body">
+        <p class="muted">Espacio vivo y compartido para volcar ideas a tratar en conjunto y poder generar contenido de forma continua.</p>
+        <div class="impact">
+          <span class="tag">Impacto para ti</span>
+          <p>Nunca te quedas sin qué grabar. Las ideas no dependen solo de tu inspiración del día — hay un sistema detrás recogiéndolas constantemente.</p>
+        </div>
+      </div>
+    </details>
+
+  </div>
+
+  <footer>
+    <div class="doc-no">FRAMEWORK <span>V.2026</span><br>Tu Estrategia de Contenido · Nadir</div>
+    <div class="contact">krisdigon00@gmail.com<br>Onboarding · Producción · Escalado</div>
+  </footer>
+
+</div>
+
+<script>
+  document.getElementById('expandAll').addEventListener('click', function(){
+    document.querySelectorAll('details.acc-item').forEach(function(d){ d.open = true; });
+  });
+  document.getElementById('collapseAll').addEventListener('click', function(){
+    document.querySelectorAll('details.acc-item').forEach(function(d){ d.open = false; });
+  });
+  document.querySelectorAll('.toc a[data-goto]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      var el = document.getElementById(a.getAttribute('data-goto'));
+      if(el){
+        el.open = true;
+        el.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    });
+  });
+</script>
+</body>
+</html>
