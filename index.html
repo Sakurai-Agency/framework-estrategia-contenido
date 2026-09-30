@@ -21,17 +21,60 @@
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
+  html{overflow-x:hidden;}
   body{
     background:var(--bg);
     color:var(--white);
     font-family:'Poppins',sans-serif;
     line-height:1.6;
     -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    position:relative;
+  }
+  .bg-deco{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    overflow:hidden;
+  }
+  .bg-deco svg{position:absolute;}
+  .bg-deco .deco-a{top:-70px;right:-90px;width:360px;height:360px;opacity:0.14;}
+  .bg-deco .deco-b{top:38%;left:-110px;width:280px;height:280px;opacity:0.10;}
+  .bg-deco .deco-c{bottom:-60px;right:6%;width:220px;height:220px;opacity:0.12;}
+  .particles{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    overflow:hidden;
+  }
+  .particle{
+    position:absolute;
+    top:0;
+    border-radius:50%;
+    background:var(--red);
+    filter:blur(3px);
+    opacity:0;
+    animation-name:fall;
+    animation-timing-function:linear;
+    animation-iteration-count:infinite;
+  }
+  @keyframes fall{
+    0%{transform:translateY(-12vh) translateX(0);opacity:0;}
+    10%{opacity:var(--op,0.3);}
+    88%{opacity:var(--op,0.3);}
+    100%{transform:translateY(112vh) translateX(var(--drift,18px));opacity:0;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .particle{animation:none;display:none;}
   }
   .wrap{
     max-width:880px;
     margin:0 auto;
     padding:56px 20px 100px;
+    position:relative;
+    z-index:1;
   }
   .kicker{
     font-size:12px;
@@ -358,6 +401,31 @@
 </style>
 </head>
 <body>
+
+<div class="bg-deco" aria-hidden="true">
+  <svg class="deco-a" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="100" cy="100" r="90" stroke="#d81e3e" stroke-width="1.5"/>
+    <line x1="100" y1="4" x2="100" y2="55" stroke="#d81e3e" stroke-width="1.5"/>
+  </svg>
+  <svg class="deco-b" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="36" cy="164" r="6" fill="#d81e3e"/>
+    <line x1="36" y1="164" x2="178" y2="34" stroke="#d81e3e" stroke-width="1.5"/>
+  </svg>
+  <svg class="deco-c" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="100" cy="100" r="70" stroke="#d81e3e" stroke-width="1.5"/>
+  </svg>
+</div>
+
+<div class="particles" aria-hidden="true">
+  <span class="particle" style="left:8%;width:5px;height:5px;animation-duration:18s;animation-delay:0s;--op:0.3;--drift:12px;"></span>
+  <span class="particle" style="left:22%;width:3px;height:3px;animation-duration:24s;animation-delay:4s;--op:0.22;--drift:-10px;"></span>
+  <span class="particle" style="left:38%;width:6px;height:6px;animation-duration:20s;animation-delay:8s;--op:0.28;--drift:16px;"></span>
+  <span class="particle" style="left:55%;width:4px;height:4px;animation-duration:26s;animation-delay:2s;--op:0.2;--drift:-14px;"></span>
+  <span class="particle" style="left:68%;width:5px;height:5px;animation-duration:19s;animation-delay:10s;--op:0.3;--drift:10px;"></span>
+  <span class="particle" style="left:82%;width:3px;height:3px;animation-duration:23s;animation-delay:6s;--op:0.22;--drift:-8px;"></span>
+  <span class="particle" style="left:92%;width:6px;height:6px;animation-duration:21s;animation-delay:12s;--op:0.26;--drift:14px;"></span>
+</div>
+
 <div class="wrap">
 
   <p class="kicker">Tu guía de trabajo · Nadir</p>
